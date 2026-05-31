@@ -1,0 +1,167 @@
+{
+  "name": "Webhook to Google Sheet with Email Notification",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "a2906001-c315-45a2-b043-e41d0fbe2f96",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "5a935579-4a3c-40d8-bde1-483a97e56680",
+      "name": "Webhook",
+      "webhookId": "a2906001-c315-45a2-b043-e41d0fbe2f96"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "1XlZfo_xGln29KXS_cwPqlkPyvXao3e7BQMIMrvlXClQ",
+          "mode": "list",
+          "cachedResultName": "n8n Webhook Data",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XlZfo_xGln29KXS_cwPqlkPyvXao3e7BQMIMrvlXClQ/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1XlZfo_xGln29KXS_cwPqlkPyvXao3e7BQMIMrvlXClQ/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "Timestamp": "={{ $now }}",
+            "Name": "={{ $json.query.name }}",
+            "Email": "={{ $json.query.Email }}",
+            "Message": "={{ $json.query.Message }}"
+          },
+          "matchingColumns": [
+            "Timestamp"
+          ],
+          "schema": [
+            {
+              "id": "Timestamp",
+              "displayName": "Timestamp",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Name",
+              "displayName": "Name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Email",
+              "displayName": "Email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Message",
+              "displayName": "Message",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        208,
+        0
+      ],
+      "id": "8b1df56a-710a-4ba6-b478-c2e1f195c770",
+      "name": "Append or update row in sheet",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "Eh6sOsmhX5WkmGuy",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "rizqialfth@gmail.com",
+        "subject": "New Webhook Entry Received",
+        "message": "=New entry has been added to Google Sheet at {{ $('Append or update row in sheet').item.json.Timestamp}}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "c7887667-f36a-41e4-a4fe-6a2bc64da268",
+      "name": "Send a message",
+      "webhookId": "f18db5b5-0080-4aa0-a90f-e83ecf1f28d0",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "u9OSp3d4HIXP65RY",
+          "name": "Gmail OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Append or update row in sheet": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "3017f7ef-735c-485a-b324-372894a07356",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "85fe8b8fc72a57dd746841d2d4a24fc7189d2394c27e0aec3350210203257fae"
+  },
+  "id": "ZajRUzEsEWb3dh2y",
+  "tags": []
+}
